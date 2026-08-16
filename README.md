@@ -73,6 +73,37 @@ JWT_SECRET="<secreto-generado-automáticamente>"
 | Componentes UI | `src/components/ui/` (shadcn) y `src/components/` (navbar, footer, logo) |
 | Middleware (JWT) | `src/proxy.ts` (Next 16 renombró `middleware.ts` → `proxy.ts`) |
 
+## Modelo de datos
+
+**Usuario** — `id`, `nombre`, `correo` (único), `clave` (hash Argon2id).
+
+**Proyecto** — `id`, `nombre`, `fechaInicio`, `estado`, `responsable`, `monto`, `created_by` (→ Usuario).
+
+Relación: `Usuario 1—N Proyecto` (cada proyecto pertenece al usuario que lo creó).
+
+## Estructura del proyecto
+
+```
+src/
+├── app/
+│   ├── api/                 # Controladores (route handlers)
+│   │   ├── auth/            # registro, login, logout
+│   │   └── proyectos/       # CRUD de proyectos
+│   ├── login/               # Vista de inicio de sesión
+│   ├── registro/            # Vista de registro
+│   └── proyectos/           # Vistas (listar, crear, detalle, editar, eliminar)
+├── components/
+│   ├── ui/                  # Componentes shadcn/ui
+│   └── navbar, footer, logo, estado-badge, brand-icons
+├── lib/                     # prisma, auth, proyecto, api
+└── proxy.ts                 # Middleware JWT (Next 16)
+prisma/
+└── schema.prisma            # Modelo de datos
+scripts/
+├── db.mjs                   # PostgreSQL embebido
+└── setup-env.js             # Genera .env automáticamente
+```
+
 ## Rutas
 
 ### API
