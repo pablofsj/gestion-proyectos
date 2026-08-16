@@ -1,4 +1,4 @@
-# Gestión de Proyectos (EVA2)
+# Tech Solutions — Gestión de Proyectos (EVA2)
 
 Aplicación web con patrón **MVC (monolito)** para la gestión de proyectos, con autenticación basada en JWT.
 
@@ -11,7 +11,8 @@ Aplicación web con patrón **MVC (monolito)** para la gestión de proyectos, co
 - **Gestión de proyectos** (CRUD completo)
   - Crear, listar, obtener por id, actualizar y eliminar.
   - Cada proyecto registra al usuario que lo creó (`created_by` → `Usuario`).
-- **Vistas** con Tailwind CSS: login, registro, listado, detalle, formularios de crear/editar y confirmación de borrado.
+  - Cada usuario solo puede editar o eliminar sus propios proyectos (autorización por `created_by`).
+- **Interfaz empresarial** con shadcn/ui y Tailwind CSS: navbar y footer con logo "Tech Solutions" y enlaces a redes sociales, cards, formularios, iconos (lucide-react), tabla con columna de id, box-shadow y text-shadow.
 - **Persistencia** en PostgreSQL vía Prisma.
 
 ## Stack
@@ -20,22 +21,19 @@ Aplicación web con patrón **MVC (monolito)** para la gestión de proyectos, co
 - Prisma 7 + PostgreSQL
 - Argon2 (`argon2id`)
 - `jose` (JWT)
-- Tailwind CSS v4
+- shadcn/ui (componentes) + Tailwind CSS v4 + `lucide-react` (iconos)
 
 ## Requisitos
 
-- Node.js 20+
-- PostgreSQL **o** nada (se incluye uno embebido, ver abajo)
+- Node.js 20+ (PostgreSQL embebido incluido, sin Docker ni instalación)
 
 ## Ejecución (desarrollo)
 
 ```bash
 npm install
 
-# 1. Base de datos
-#    Opción A — PostgreSQL embebido (sin instalar nada):
+# 1. Base de datos (PostgreSQL embebido — sin Docker ni instalación)
 npm run db:start
-#    Opción B — tu propio PostgreSQL: crea la BD "desarrollo_software_1" y configura .env
 
 # 2. Migraciones (crea las tablas Usuario y Proyecto)
 npm run db:migrate -- --name init
@@ -77,6 +75,7 @@ JWT_SECRET="<secreto-de-32-bytes>"
 | Modelo | `prisma/schema.prisma` |
 | Controlador | `src/app/api/**/route.ts` |
 | Vista | `src/app/**/page.tsx` |
+| Componentes UI | `src/components/ui/` (shadcn) y `src/components/` (navbar, footer, logo) |
 | Middleware (JWT) | `src/proxy.ts` (Next 16 renombró `middleware.ts` → `proxy.ts`) |
 
 ## Rutas

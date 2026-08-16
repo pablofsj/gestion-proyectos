@@ -18,7 +18,7 @@ Aplicación web con patrón **MVC (monolito)** para gestión de proyectos con au
 - Prisma 7 + PostgreSQL (driver adapter `@prisma/adapter-pg`)
 - Argon2 (`argon2id`) para el hash de claves
 - `jose` para firmar/verificar JWT (Edge/Node)
-- Tailwind CSS v4
+- shadcn/ui (componentes) + Tailwind CSS v4 + `lucide-react` (iconos)
 - Cookie `httpOnly` + `Secure` + `SameSite` para el JWT
 
 ## Arquitectura (mapeo MVC)
@@ -28,6 +28,7 @@ Aplicación web con patrón **MVC (monolito)** para gestión de proyectos con au
 | Modelo | `prisma/schema.prisma` (`Usuario`, `Proyecto`) |
 | Controlador | `src/app/api/**/route.ts` |
 | Vista | `src/app/**/page.tsx` |
+| Componentes UI | `src/components/ui/` (shadcn) y `src/components/` (navbar, footer, logo, estado-badge, brand-icons) |
 | Middleware JWT | `src/proxy.ts` |
 | Prisma client | `src/lib/prisma.ts` (singleton + adapter) |
 | Auth helpers | `src/lib/auth.ts` |
@@ -43,15 +44,15 @@ Aplicación web con patrón **MVC (monolito)** para gestión de proyectos con au
 
 ## Base de datos
 
-- PostgreSQL. Credenciales: db `desarrollo_software_1`, user `root`, pass `desarrollo_software_1` (ver `.env`).
-- Sin PostgreSQL local: `npm run db:start` levanta uno embebido (`embedded-postgres`, `scripts/db.mjs`); se detiene al terminar ese proceso.
+- PostgreSQL **embebido** (`embedded-postgres`, `scripts/db.mjs`): sin Docker ni instalación local.
+- `npm run db:start` lo levanta en `localhost:5432` (db `desarrollo_software_1`, user `root`, pass `desarrollo_software_1`; ver `.env`). Se detiene al terminar ese proceso.
 - Migraciones: `npm run db:migrate -- --name <nombre>`.
 
 ## Comandos
 
 ```bash
 npm install
-npm run db:start        # PostgreSQL embebido (opcional)
+npm run db:start        # levanta PostgreSQL embebido
 npm run db:migrate -- --name init
 npm run dev             # http://localhost:3000
 npm run build
@@ -63,3 +64,5 @@ npm run start
 - `src/lib/proyecto.ts` centraliza la validación de entrada de proyectos (POST y PUT).
 - `getSessionUserId()` (`src/lib/auth.ts`) re-decoda el JWT de la cookie; los controladores de proyectos la usan para `created_by` y para responder 401.
 - El proxy valida el JWT y protege `/proyectos` y `/api/proyectos` (redirige a `/login` o devuelve 401). La cookie se firma con `JWT_SECRET` (HS256, `jose`).
+
+- PUT y DELETE de `/api/proyectos/[id]` verifican que `proyecto.created_by === userId`; si no coinciden devuelven 403 (un usuario no puede editar/borrar proyectos de otro).
