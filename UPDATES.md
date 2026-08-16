@@ -1,6 +1,0 @@
-# Updates necesarios en la aplicacion
-- Cambiar Framework CSS desde Tailwind a shadcn-ui y Mejorar el diseño de la aplicacion (vistas), incorporando paleta de colores moderna, buttons, navigation menu, footer , forms, cards y los que consideres necesarios, creando una apariencia empresarial con iconos modernos, crear o utilizar fuente moderna para logo Tech Solutions, que debe ir en navbar y en footer con enlace a redes sociales con logos, hacer uso de box-shadow , text-shadow
-- Corregir uso de postgresql, solo mantener postgresql embebido para una ejecucion simple sin lidiar con docker o instalaciones lcales
-- Todos los cambios aplicarlos al AGENTS.md y al README.md (pero sin generar nuevas screenshots aun), ya que te pedire nuevamente screenshots especificas mas adelante
-- Revisar y corregir -si es necesario- que el usuario que crea un proyecto no pueda borrar proyectos que creo otro usuario
-- incorporar en el front en la tabla que muestra los proyectos una columna de id con el id de cada proyecto

@@ -46,3 +46,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# documentos de trabajo (no versionar; solo se mantienen AGENTS.md y README.md)
+/INIT.md
+/PLAN.md
+/UPDATES.md
