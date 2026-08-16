@@ -2,9 +2,9 @@ import { Logo } from "@/components/logo";
 import { GithubIcon, LinkedinIcon, XIcon } from "@/components/brand-icons";
 
 const socials = [
-  { name: "GitHub", href: "https://github.com/pablofsj", Icon: GithubIcon },
-  { name: "LinkedIn", href: "https://www.linkedin.com", Icon: LinkedinIcon },
-  { name: "X", href: "https://x.com", Icon: XIcon },
+  { name: "GitHub", href: "https://github.com/techsolutions", Icon: GithubIcon },
+  { name: "LinkedIn", href: "https://www.linkedin.com/techsolutions", Icon: LinkedinIcon },
+  { name: "X", href: "https://x.com/techsolutions", Icon: XIcon },
 ];
 
 export function Footer() {
