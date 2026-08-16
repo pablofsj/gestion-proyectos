@@ -137,3 +137,13 @@ Aplicación en ejecución (`http://localhost:3000`), probando la autenticación 
 **Eliminar** — `DELETE /api/proyectos/[id]`: confirmación antes de borrar.
 
 ![Eliminar proyecto](docs/screenshots/proyecto-eliminar.png)
+
+### Autorización — intento de borrar un proyecto ajeno (403)
+
+Un usuario solo puede eliminar sus propios proyectos. Aquí el usuario "Bruno" intenta eliminar el proyecto creado por "Ana":
+
+![Intento de eliminar proyecto ajeno](docs/screenshots/permiso-intento.png)
+
+El servidor rechaza la petición con `403 Forbidden`:
+
+![Error 403 al eliminar proyecto ajeno](docs/screenshots/permiso-error.png)
