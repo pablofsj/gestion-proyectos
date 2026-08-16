@@ -2,11 +2,27 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { FolderKanban, Pencil, Plus, Trash2 } from "lucide-react";
 import { api, formatFecha, type Proyecto } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { EstadoBadge } from "@/components/estado-badge";
 
 export default function ProyectosPage() {
-  const router = useRouter();
   const [proyectos, setProyectos] = useState<Proyecto[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -17,78 +33,94 @@ export default function ProyectosPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  async function logout() {
-    await api("/api/auth/logout", { method: "POST" });
-    router.push("/login");
-  }
-
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-4xl">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-gray-900">Proyectos</h1>
-          <div className="flex gap-2">
-            <Link
-              href="/proyectos/nuevo"
-              className="rounded bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-            >
+    <div className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
+      <Card className="shadow-lg">
+        <CardHeader className="flex flex-row items-center justify-between gap-4">
+          <div>
+            <CardTitle className="flex items-center gap-2 text-2xl">
+              <FolderKanban className="size-6 text-primary" />
+              Proyectos
+            </CardTitle>
+            <CardDescription>
+              Gestiona todos los proyectos de la empresa
+            </CardDescription>
+          </div>
+          <Button asChild>
+            <Link href="/proyectos/nuevo">
+              <Plus />
               Nuevo proyecto
             </Link>
-            <button
-              onClick={logout}
-              className="rounded border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Cerrar sesión
-            </button>
-          </div>
-        </div>
-
-        {loading ? (
-          <p className="text-gray-600">Cargando…</p>
-        ) : proyectos.length === 0 ? (
-          <p className="rounded bg-white p-6 text-gray-600 shadow">
-            No hay proyectos registrados.
-          </p>
-        ) : (
-          <table className="w-full overflow-hidden rounded-lg bg-white shadow">
-            <thead className="bg-gray-50 text-left text-sm text-gray-600">
-              <tr>
-                <th className="px-4 py-3 font-medium">Nombre</th>
-                <th className="px-4 py-3 font-medium">Estado</th>
-                <th className="px-4 py-3 font-medium">Responsable</th>
-                <th className="px-4 py-3 font-medium">Monto</th>
-                <th className="px-4 py-3 font-medium">Inicio</th>
-                <th className="px-4 py-3 font-medium">Acciones</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm text-gray-800">
-              {proyectos.map((p) => (
-                <tr key={p.id}>
-                  <td className="px-4 py-3">
-                    <Link href={`/proyectos/${p.id}`} className="font-medium text-blue-600 hover:underline">
-                      {p.nombre}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">{p.estado}</td>
-                  <td className="px-4 py-3">{p.responsable}</td>
-                  <td className="px-4 py-3">${p.monto.toLocaleString()}</td>
-                  <td className="px-4 py-3">{formatFecha(p.fechaInicio)}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-3">
-                      <Link href={`/proyectos/${p.id}/editar`} className="text-blue-600 hover:underline">
-                        Editar
+          </Button>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <p className="py-8 text-center text-muted-foreground">Cargando…</p>
+          ) : proyectos.length === 0 ? (
+            <p className="py-12 text-center text-muted-foreground">
+              No hay proyectos registrados.
+            </p>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-16">ID</TableHead>
+                  <TableHead>Nombre</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Responsable</TableHead>
+                  <TableHead>Monto</TableHead>
+                  <TableHead>Inicio</TableHead>
+                  <TableHead className="text-right">Acciones</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {proyectos.map((p) => (
+                  <TableRow key={p.id}>
+                    <TableCell className="font-mono text-muted-foreground">
+                      #{p.id}
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      <Link
+                        href={`/proyectos/${p.id}`}
+                        className="text-foreground hover:text-primary hover:underline"
+                      >
+                        {p.nombre}
                       </Link>
-                      <Link href={`/proyectos/${p.id}/eliminar`} className="text-red-600 hover:underline">
-                        Eliminar
-                      </Link>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
-    </main>
+                    </TableCell>
+                    <TableCell>
+                      <EstadoBadge estado={p.estado} />
+                    </TableCell>
+                    <TableCell>{p.responsable}</TableCell>
+                    <TableCell>${p.monto.toLocaleString()}</TableCell>
+                    <TableCell>{formatFecha(p.fechaInicio)}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link
+                            href={`/proyectos/${p.id}/editar`}
+                            aria-label={`Editar ${p.nombre}`}
+                          >
+                            <Pencil />
+                          </Link>
+                        </Button>
+                        <Button asChild variant="ghost" size="icon-sm">
+                          <Link
+                            href={`/proyectos/${p.id}/eliminar`}
+                            aria-label={`Eliminar ${p.nombre}`}
+                            className="text-destructive hover:text-destructive"
+                          >
+                            <Trash2 />
+                          </Link>
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

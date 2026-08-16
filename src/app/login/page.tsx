@@ -3,7 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { LogIn } from "lucide-react";
 import { api } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -32,44 +43,58 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-gray-100 p-4">
-      <div className="w-full max-w-sm rounded-lg bg-white p-8 shadow">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">Inicio de Sesión</h1>
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Correo</label>
-            <input
-              name="correo"
-              type="email"
-              required
-              className="w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-            />
+    <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-primary/10 via-background to-background px-4 py-12">
+      <Card className="w-full max-w-sm shadow-xl">
+        <CardHeader className="text-center">
+          <div className="mx-auto mb-2 grid size-12 place-items-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/30">
+            <LogIn className="size-6" />
           </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Clave</label>
-            <input
-              name="clave"
-              type="password"
-              required
-              className="w-full rounded border border-gray-300 px-3 py-2 text-gray-900"
-            />
-          </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-          >
-            {loading ? "Ingresando…" : "Ingresar"}
-          </button>
-        </form>
-        <p className="mt-4 text-center text-sm text-gray-600">
-          ¿No tienes cuenta?{" "}
-          <Link href="/registro" className="text-blue-600 hover:underline">
-            Regístrate
-          </Link>
-        </p>
-      </div>
-    </main>
+          <CardTitle className="text-2xl">Inicio de Sesión</CardTitle>
+          <CardDescription>
+            Ingresa tus credenciales para continuar
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="correo">Correo</Label>
+              <Input
+                id="correo"
+                name="correo"
+                type="email"
+                required
+                autoComplete="email"
+                placeholder="correo@empresa.com"
+                className="h-10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="clave">Clave</Label>
+              <Input
+                id="clave"
+                name="clave"
+                type="password"
+                required
+                autoComplete="current-password"
+                className="h-10"
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <Button type="submit" disabled={loading} size="lg" className="w-full">
+              {loading ? "Ingresando…" : "Ingresar"}
+            </Button>
+          </form>
+          <p className="mt-5 text-center text-sm text-muted-foreground">
+            ¿No tienes cuenta?{" "}
+            <Link
+              href="/registro"
+              className="font-medium text-primary hover:underline"
+            >
+              Regístrate
+            </Link>
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

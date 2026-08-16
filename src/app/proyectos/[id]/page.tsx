@@ -3,7 +3,26 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import {
+  ArrowLeft,
+  CalendarDays,
+  CircleDollarSign,
+  FolderKanban,
+  Hash,
+  Pencil,
+  Trash2,
+  UserRound,
+} from "lucide-react";
 import { api, formatFecha, type Proyecto } from "@/lib/api";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { EstadoBadge } from "@/components/estado-badge";
 
 export default function ProyectoDetallePage() {
   const { id } = useParams<{ id: string }>();
@@ -18,61 +37,100 @@ export default function ProyectoDetallePage() {
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gray-100 p-6">
-        <p className="text-red-600">{error}</p>
-        <Link href="/proyectos" className="text-blue-600 hover:underline">
-          Volver a proyectos
-        </Link>
-      </main>
+      <div className="mx-auto w-full max-w-lg flex-1 px-4 py-8">
+        <Card className="shadow-lg">
+          <CardContent className="space-y-4 py-8 text-center">
+            <p className="text-destructive">{error}</p>
+            <Button asChild variant="outline">
+              <Link href="/proyectos">
+                <ArrowLeft />
+                Volver a proyectos
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
     );
   }
 
   if (!proyecto) {
-    return <main className="min-h-screen bg-gray-100 p-6">Cargando…</main>;
+    return (
+      <div className="mx-auto w-full max-w-lg flex-1 px-4 py-8 text-muted-foreground">
+        Cargando…
+      </div>
+    );
   }
 
-  const rows: [string, string][] = [
-    ["Nombre", proyecto.nombre],
-    ["Fecha de Inicio", formatFecha(proyecto.fechaInicio)],
-    ["Estado", proyecto.estado],
-    ["Responsable", proyecto.responsable],
-    ["Monto", `$${proyecto.monto.toLocaleString()}`],
-    ["Creado por", proyecto.creador?.nombre ?? "—"],
+  const campos = [
+    { label: "ID", valor: `#${proyecto.id}`, Icon: Hash },
+    { label: "Fecha de Inicio", valor: formatFecha(proyecto.fechaInicio), Icon: CalendarDays },
+    { label: "Estado", Icon: FolderKanban, badge: true },
+    { label: "Responsable", valor: proyecto.responsable, Icon: UserRound },
+    {
+      label: "Monto",
+      valor: `$${proyecto.monto.toLocaleString()}`,
+      Icon: CircleDollarSign,
+    },
+    {
+      label: "Creado por",
+      valor: proyecto.creador?.nombre ?? "—",
+      Icon: UserRound,
+    },
   ];
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-lg">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">{proyecto.nombre}</h1>
-        <dl className="divide-y divide-gray-100 rounded-lg bg-white p-6 shadow">
-          {rows.map(([label, value]) => (
-            <div key={label} className="flex justify-between py-2 text-sm">
-              <dt className="font-medium text-gray-600">{label}</dt>
-              <dd className="text-gray-900">{value}</dd>
-            </div>
-          ))}
-        </dl>
-        <div className="mt-4 flex gap-2">
-          <Link
-            href={`/proyectos/${proyecto.id}/editar`}
-            className="rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700"
-          >
-            Editar
-          </Link>
-          <Link
-            href={`/proyectos/${proyecto.id}/eliminar`}
-            className="rounded border border-red-300 bg-white px-4 py-2 font-medium text-red-600 hover:bg-red-50"
-          >
-            Eliminar
-          </Link>
-          <Link
-            href="/proyectos"
-            className="rounded border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
-          >
-            Volver
-          </Link>
-        </div>
-      </div>
-    </main>
+    <div className="mx-auto w-full max-w-lg flex-1 px-4 py-8">
+      <Link
+        href="/proyectos"
+        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" />
+        Volver a proyectos
+      </Link>
+
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-2xl">{proyecto.nombre}</CardTitle>
+          <CardDescription>Detalle del proyecto</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <dl className="divide-y">
+            {campos.map(({ label, valor, Icon, badge }) => (
+              <div
+                key={label}
+                className="flex items-center justify-between gap-4 py-3"
+              >
+                <dt className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Icon className="size-4" />
+                  {label}
+                </dt>
+                <dd className="text-sm font-medium">
+                  {badge ? (
+                    <EstadoBadge estado={proyecto.estado} />
+                  ) : (
+                    valor
+                  )}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="mt-6 flex gap-2">
+            <Button asChild>
+              <Link href={`/proyectos/${proyecto.id}/editar`}>
+                <Pencil />
+                Editar
+              </Link>
+            </Button>
+            <Button asChild variant="destructive">
+              <Link href={`/proyectos/${proyecto.id}/eliminar`}>
+                <Trash2 />
+                Eliminar
+              </Link>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }

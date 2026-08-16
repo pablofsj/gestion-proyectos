@@ -3,10 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { ArrowLeft, Plus } from "lucide-react";
 import { api } from "@/lib/api";
-
-const fieldClass =
-  "w-full rounded border border-gray-300 px-3 py-2 text-gray-900";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function NuevoProyectoPage() {
   const router = useRouter();
@@ -38,48 +46,94 @@ export default function NuevoProyectoPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 p-6">
-      <div className="mx-auto max-w-lg">
-        <h1 className="mb-6 text-2xl font-bold text-gray-900">Crear Proyecto</h1>
-        <form onSubmit={onSubmit} className="space-y-4 rounded-lg bg-white p-6 shadow">
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Nombre</label>
-            <input name="nombre" required className={fieldClass} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Fecha de Inicio</label>
-            <input name="fechaInicio" type="date" required className={fieldClass} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Estado</label>
-            <input name="estado" required className={fieldClass} placeholder="En progreso, Finalizado…" />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Responsable</label>
-            <input name="responsable" required className={fieldClass} />
-          </div>
-          <div>
-            <label className="mb-1 block text-sm font-medium text-gray-700">Monto</label>
-            <input name="monto" type="number" step="0.01" required className={fieldClass} />
-          </div>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-          <div className="flex gap-2">
-            <button
-              type="submit"
-              disabled={loading}
-              className="rounded bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
-            >
-              {loading ? "Guardando…" : "Crear"}
-            </button>
-            <Link
-              href="/proyectos"
-              className="rounded border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 hover:bg-gray-50"
-            >
-              Cancelar
-            </Link>
-          </div>
-        </form>
-      </div>
-    </main>
+    <div className="mx-auto w-full max-w-lg flex-1 px-4 py-8">
+      <Link
+        href="/proyectos"
+        className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" />
+        Volver a proyectos
+      </Link>
+
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-2xl">
+            <Plus className="size-6 text-primary" />
+            Crear Proyecto
+          </CardTitle>
+          <CardDescription>
+            Registra un nuevo proyecto en el sistema
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="nombre">Nombre</Label>
+              <Input
+                id="nombre"
+                name="nombre"
+                required
+                placeholder="Nombre del proyecto"
+                className="h-10"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="fechaInicio">Fecha de Inicio</Label>
+              <Input
+                id="fechaInicio"
+                name="fechaInicio"
+                type="date"
+                required
+                className="h-10"
+              />
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="estado">Estado</Label>
+                <Input
+                  id="estado"
+                  name="estado"
+                  required
+                  placeholder="En progreso"
+                  className="h-10"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="responsable">Responsable</Label>
+                <Input
+                  id="responsable"
+                  name="responsable"
+                  required
+                  placeholder="Nombre del responsable"
+                  className="h-10"
+                />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="monto">Monto</Label>
+              <Input
+                id="monto"
+                name="monto"
+                type="number"
+                step="0.01"
+                min="0"
+                required
+                placeholder="0.00"
+                className="h-10"
+              />
+            </div>
+            {error && <p className="text-sm text-destructive">{error}</p>}
+            <div className="flex gap-2 pt-2">
+              <Button type="submit" disabled={loading} size="lg">
+                {loading ? "Guardando…" : "Crear proyecto"}
+              </Button>
+              <Button asChild variant="outline" size="lg">
+                <Link href="/proyectos">Cancelar</Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
