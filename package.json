@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "node scripts/setup-env.js && next dev",
+    "build": "node scripts/setup-env.js && next build",
     "start": "next start",
-    "postinstall": "prisma generate",
+    "postinstall": "node scripts/setup-env.js && prisma generate",
     "db:start": "node scripts/db.mjs",
     "db:migrate": "prisma migrate dev"
   },
