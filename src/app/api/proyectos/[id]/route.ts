@@ -32,6 +32,13 @@ export async function PUT(request: Request, { params }: Ctx) {
   if (!proyecto) {
     return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
   }
+  if (proyecto.created_by !== userId) {
+    return NextResponse.json(
+      { error: "No tienes permiso para modificar este proyecto" },
+      { status: 403 }
+    );
+  }
+
 
   const body = await request.json().catch(() => null);
   const { data, error } = parseProyectoInput(body);
@@ -57,6 +64,13 @@ export async function DELETE(_request: Request, { params }: Ctx) {
   if (!proyecto) {
     return NextResponse.json({ error: "Proyecto no encontrado" }, { status: 404 });
   }
+  if (proyecto.created_by !== userId) {
+    return NextResponse.json(
+      { error: "No tienes permiso para eliminar este proyecto" },
+      { status: 403 }
+    );
+  }
+
 
   await prisma.proyecto.delete({ where: { id: proyecto.id } });
   return NextResponse.json({ ok: true });
