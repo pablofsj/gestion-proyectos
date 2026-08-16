@@ -53,7 +53,7 @@ src/app/
 
 ### Fase 1 — Variables de entorno
 ```
-DATABASE_URL="postgresql://root:desarrollo_software_1@localhost:5432/desarrollo_software_1"
+DATABASE_URL="postgresql://root:desarrollo_software_1@localhost:5433/desarrollo_software_1"
 JWT_SECRET="<generado>"
 ```
 - Nombre BD: `desarrollo_software_1`

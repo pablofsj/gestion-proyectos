@@ -51,22 +51,17 @@ npm run start  # http://localhost:3000
 
 ## Variables de entorno (`.env`)
 
-Copia el archivo de ejemplo y ajusta los valores:
+El archivo `.env` se genera **automáticamente** al ejecutar `npm install` (vía `scripts/setup-env.js`). No necesitas crearlo manualmente.
 
-```bash
-cp .env.example .env
-```
-
-Contenido:
 ```ini
-DATABASE_URL="postgresql://root:desarrollo_software_1@localhost:5432/desarrollo_software_1"
-JWT_SECRET="<secreto-de-32-bytes>"
+DATABASE_URL="postgresql://root:desarrollo_software_1@localhost:5433/desarrollo_software_1"
+JWT_SECRET="<secreto-generado-automáticamente>"
 ```
 
 | Variable | Descripción |
 |---|---|
-| `DATABASE_URL` | Conexión a PostgreSQL (db `desarrollo_software_1`, user `root`, pass `desarrollo_software_1`). |
-| `JWT_SECRET` | Clave para firmar/verificar los JWT. |
+| `DATABASE_URL` | Conexión a PostgreSQL embebido (db `desarrollo_software_1`, user `root`, puerto `5433`). |
+| `JWT_SECRET` | Clave para firmar/verificar los JWT (se genera aleatoriamente en el primer `npm install`). |
 
 ## Arquitectura MVC
 

@@ -44,8 +44,9 @@ Aplicación web con patrón **MVC (monolito)** para gestión de proyectos con au
 
 ## Base de datos
 
-- PostgreSQL **embebido** (`embedded-postgres`, `scripts/db.mjs`): sin Docker ni instalación local.
-- `npm run db:start` lo levanta en `localhost:5432` (db `desarrollo_software_1`, user `root`, pass `desarrollo_software_1`; ver `.env`). Se detiene al terminar ese proceso.
+- PostgreSQL **embebido** (`embedded-postgres`, `scripts/db.mjs`): sin Docker ni instalación local. Corre en el puerto `5433`.
+- `.env` se crea **automáticamente** en `postinstall`/`dev`/`build` vía `scripts/setup-env.js` (con `JWT_SECRET` aleatorio de 32 bytes). No requiere configuración manual.
+- `npm run db:start` lo levanta en `localhost:5433` (db `desarrollo_software_1`, user `root`, pass `desarrollo_software_1`).
 - Migraciones: `npm run db:migrate -- --name <nombre>`.
 
 ## Comandos
