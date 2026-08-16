@@ -1,13 +1,21 @@
 {
-  "name": "scaffold-tmp",
+  "name": "gestion-proyectos",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "prisma generate",
+    "db:start": "node scripts/db.mjs",
+    "db:migrate": "prisma migrate dev"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "argon2": "^0.45.1",
+    "dotenv": "^17.4.2",
+    "jose": "^6.2.9",
     "next": "16.3.1",
     "react": "19.2.8",
     "react-dom": "19.2.8"
@@ -17,7 +25,15 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "embedded-postgres": "^18.4.0-beta.17",
+    "prisma": "^7.9.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "allowScripts": {
+    "argon2@0.45.1": true,
+    "prisma@7.9.1": true,
+    "@prisma/engines@7.9.1": true,
+    "@embedded-postgres/linux-x64@18.4.0-beta.17": true
   }
 }
